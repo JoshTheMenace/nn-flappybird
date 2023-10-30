@@ -1,47 +1,66 @@
-# Example file showing a circle moving on screen
 import pygame
 from bird import Bird
+from pipe import Pipe
+from game import Game
 
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
-running = True
-dt = 0
-bird = Bird(screen)
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+def main():
+    game = Game()
+    # pygame setup
+    pygame.init()
+    screen = pygame.display.set_mode((1280, 720))
+    clock = pygame.time.Clock()
+    running = True
+    dt = 0
+    bird = Bird(screen)
+    pipes = []
+    # pipe = Pipe(screen)
+    player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
+    while running:
+        # poll for events
+        # pygame.QUIT event means the user clicked X to close your window
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        
+            if event.type == pygame.KEYDOWN and game.active == True:
+                if event.key == pygame.K_SPACE:
+                    bird.jump()
 
-    bird.update()
-    bird.draw()
-    
-    # pygame.draw.circle(screen, "red", player_pos, 40)
+        # fill the screen with a color to wipe away anything from last frame
+        screen.fill("aqua")
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_SPACE]:
-        bird.jump()
-    if keys[pygame.K_s]:
-        bird.pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        bird.pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        bird.pos.x += 300 * dt
+        # print(pipes)
+        if(game.frame_count % 120 == 0):
+            pipes.append(Pipe(screen))
 
-    # flip() the display to put your work on screen
-    pygame.display.flip()
+        if(game.active == True):
+            bird.update()
+        bird.draw()
 
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
-    dt = clock.tick(60) / 1000
+        for pipe in pipes:
+            if(pipe.check_collision(bird)):
+                game.active = False
+                for p in pipes:
+                    p.speed = 0
+            pipe.update()
+            pipe.draw()
+            if(pipe.x < 0):
+                pipes.remove(pipe)
 
-pygame.quit()
+                
+        
+        pygame.display.flip()
+
+        # limits FPS to 60
+        # dt is delta time in seconds since last frame, used for framerate-
+        # independent physics.
+        game.frame_count += 1
+        dt = clock.tick(60) / 1000
+
+    pygame.quit()
+
+
+if __name__ == "__main__":
+    main()
