@@ -32,8 +32,12 @@ def main():
                 if event.key == pygame.K_SPACE:
                     bird.jump() if game.active == True else ""
 
-            # if event.type == pygame.MOUSEBUTTONDOWN:
-            #     game.active = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if game.active == False:
+                    game.pipes_sprite.empty()
+                    game.score.reset()
+                    bird.rect.y = 50
+                    game.active = True
 
         # fill the screen with a color to wipe away anything from last frame
         screen.fill("aqua")
