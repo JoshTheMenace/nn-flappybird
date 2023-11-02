@@ -3,7 +3,7 @@ import pygame
 
 
 class Pipe(pygame.sprite.Sprite):
-    width = 50
+    width = 70
     speed = 4
 
     def __init__(self, x, top, width, height) -> None:

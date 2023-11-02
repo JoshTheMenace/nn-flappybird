@@ -21,7 +21,7 @@ class Game:
         x = self.screen.get_width()
         y = self.screen.get_height()
         
-        random_space_height = random.randint(115,230) # random int pixel space for bird to go through
+        random_space_height = random.randint(130,230) # random int pixel space for bird to go through
         space_top = int(random.randint(50, y - 50 - random_space_height)) # choose a random value from y 50 to screen height - 110 
         space_bottom = space_top + random_space_height
         
@@ -34,7 +34,7 @@ class Background:
 
     def __init__(self, width, height) -> None:
         # IMAGE 
-        bg = pygame.image.load("tree.png").convert() 
+        bg = pygame.image.load("bg.png").convert() 
         self.bg = pygame.transform.scale(bg, (width, height))
         
         # DEFINING MAIN VARIABLES IN SCROLLING 
@@ -48,8 +48,7 @@ class Background:
     def update(self, screen):
         i = 0
         while(i < self.tiles): 
-            screen.blit(self.bg, (self.bg.get_width()*i 
-                            + self.scroll, 0)) 
+            screen.blit(self.bg, (self.bg.get_width() * i + self.scroll, 0)) 
             i += 1
        
 
