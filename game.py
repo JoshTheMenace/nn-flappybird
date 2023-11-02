@@ -3,18 +3,81 @@ import random
 import pygame
 from pipe import Pipe
 from math import ceil
+from bird import Bird
+from gamescreen import GameScreen
 
-class Game:
-    
+
+class Game(GameScreen):
+
     frame_count = 0
     game_state = "play"
     pipes_sprite = pygame.sprite.Group()
     bird_sprite = pygame.sprite.GroupSingle()
     active = True
 
-    def __init__(self, screen) -> None:
-        self.screen = screen
+    def __init__(self, nav) -> None:
+        self.nav = nav
         self.score = Score()
+        
+        self.gamefont = pygame.font.SysFont('Comic Sans MS', 30)
+        self.bg = Background(1280, 720)
+        self.clock = pygame.time.Clock()
+        
+
+        self.bird = Bird(self.screen)
+        self.bird_sprite.add(self.bird)
+
+    def screen_loop(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+        
+            if event.type == pygame.KEYDOWN and self.active == True:
+                if event.key == pygame.K_SPACE:
+                    self.bird.jump() if self.active == True else ""
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.active == False:
+                    self.pipes_sprite.empty()
+                    self.score.reset()
+                    self.bird.rect.y = 50
+                    self.active = True
+
+
+        self.bg.update(self.screen) 
+        self.bg.scroll_frame() if self.active else ""
+
+        text_surface = self.gamefont.render(f"Score: {str(self.score.normalize())}", False, (0, 0, 0))
+        
+
+        if(self.frame_count % 120 == 0):
+            if self.active == True:
+                self.create_pipes()
+           
+
+        for pipe in list(self.pipes_sprite):
+            if(pygame.sprite.spritecollide(self.bird, self.pipes_sprite, 0)):
+                self.active = False
+    
+            if(pipe.rect.x < 0 - Pipe.width):
+                self.remove_pipe(pipe)
+                self.score.increase()
+
+        if(self.active == True):
+            self.pipes_sprite.update()
+
+        self.pipes_sprite.draw(self.screen)
+        self.bird_sprite.update()
+        self.bird_sprite.draw(self.screen)
+
+
+                
+
+        self.screen.blit(text_surface, (100,50))
+        
+        
+        self.frame_count += 1
+        self.clock.tick(60)
 
 
     def create_pipes(self):

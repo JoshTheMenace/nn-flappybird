@@ -3,9 +3,9 @@ from pygame import font
 
 WIDTH = 1280
 HEIGHT = 720
-
-class Constants:
-    pass
+BLACK    = (   0,   0,   0) 
+WHITE    = ( 255, 255, 254) 
+BLUE     = (   0,   0, 255)
 
 class NewFont():
     button_font = 'trebuchetms'
