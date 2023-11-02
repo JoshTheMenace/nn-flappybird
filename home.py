@@ -1,6 +1,6 @@
 import pygame  
 # from main import main
-from constants import Constants, NewFont, HEIGHT, WIDTH
+from constants import NewFont, HEIGHT, WIDTH
 from button import Button
 from gamescreen import GameScreen
 

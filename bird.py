@@ -1,12 +1,20 @@
 import pygame
+from animation import Sprite_Collection
+import math
 
 
 class Bird(pygame.sprite.Sprite):
 
     def __init__(self, screen) -> None:
         pygame.sprite.Sprite.__init__(self)
+        self.sprites = Sprite_Collection('chicken')
+
+        self.images = self.sprites.alive_images
+        self.index = 0
         self.screen = screen
-        self.image = pygame.image.load("bird.png").convert_alpha()
+        self.hit = False
+        # self.image = pygame.image.load("bird.png").convert_alpha()
+        self.image = self.images[math.ceil(self.index)]
 
         self.rect = self.image.get_rect()
 
@@ -16,6 +24,18 @@ class Bird(pygame.sprite.Sprite):
 
 
     def update(self):
+        
+        self.images = self.sprites.alive_images if self.hit == False else self.sprites.dead_images
+
+        # if self.hit:
+
+        self.index += (0.1 * self.sprites.factor) if self.hit else 0.1
+
+        if math.ceil(self.index) > len(self.images) -1:
+            self.index = 0
+
+        self.image = self.images[math.ceil(self.index)]
+
         self.velocity += self.gravity
         # self.velocity *= 0.9
         self.rect.y += self.velocity

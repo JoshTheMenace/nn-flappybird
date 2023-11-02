@@ -10,8 +10,8 @@ def main():
 
     nav = Navigation()
 
-
-    while nav.current_screen.running:
+ 
+    while nav.current_screen.running: 
 
         nav.current_screen.screen_loop()
 

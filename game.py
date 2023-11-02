@@ -41,6 +41,7 @@ class Game(GameScreen):
                     self.pipes_sprite.empty()
                     self.score.reset()
                     self.bird.rect.y = 50
+                    self.bird.hit = False
                     self.active = True
 
 
@@ -58,6 +59,7 @@ class Game(GameScreen):
         for pipe in list(self.pipes_sprite):
             if(pygame.sprite.spritecollide(self.bird, self.pipes_sprite, 0)):
                 self.active = False
+                self.bird.hit = True
     
             if(pipe.rect.x < 0 - Pipe.width):
                 self.remove_pipe(pipe)
