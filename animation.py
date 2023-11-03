@@ -1,5 +1,5 @@
 import os
-from pygame import image, transform
+from pygame import image, transform, SRCALPHA
 
 class Sprite_Collection:
 
@@ -17,9 +17,24 @@ class Sprite_Collection:
             img = transform.scale(img, (64, 50))
             self.dead_images.append(img)
 
-        self.factor = len(self.alive_images) / len(self.dead_images)
+        self.factor = len(self.alive_images) / len(self.dead_images) * 5
         
     
+    @classmethod
+    def get_all_birds(self):
+
+        birds = []
+        types = []
+        for file_name in os.listdir("birds"):
+            images = os.listdir("birds" + os.sep + file_name +"/flying")
+            img = image.load("birds" + os.sep + file_name +"/flying/" + images[0]).convert_alpha()
+            # img = img.set_aa(pygame.SRCALPHA)
+            # img = image.load(path + "/flying" + os.sep + file_name).convert_alpha()
+            birds.append(transform.scale(img, (128, 100)))
+            types.append(file_name)
+        return birds, types
+    
+
 
     
 

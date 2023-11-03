@@ -5,9 +5,9 @@ import math
 
 class Bird(pygame.sprite.Sprite):
 
-    def __init__(self, screen) -> None:
+    def __init__(self, screen, type) -> None:
         pygame.sprite.Sprite.__init__(self)
-        self.sprites = Sprite_Collection('chicken')
+        self.sprites = Sprite_Collection(type)
 
         self.images = self.sprites.alive_images
         self.index = 0

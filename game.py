@@ -14,8 +14,9 @@ class Game(GameScreen):
     pipes_sprite = pygame.sprite.Group()
     bird_sprite = pygame.sprite.GroupSingle()
     active = True
+    
 
-    def __init__(self, nav) -> None:
+    def __init__(self, nav, bird_type) -> None:
         self.nav = nav
         self.score = Score()
         
@@ -24,8 +25,9 @@ class Game(GameScreen):
         self.clock = pygame.time.Clock()
         
 
-        self.bird = Bird(self.screen)
+        self.bird = Bird(self.screen, bird_type)
         self.bird_sprite.add(self.bird)
+        
 
     def screen_loop(self):
         for event in pygame.event.get():
@@ -86,7 +88,7 @@ class Game(GameScreen):
         x = self.screen.get_width()
         y = self.screen.get_height()
         
-        random_space_height = random.randint(130,230) # random int pixel space for bird to go through
+        random_space_height = random.randint(150,230) # random int pixel space for bird to go through
         space_top = int(random.randint(50, y - 50 - random_space_height)) # choose a random value from y 50 to screen height - 110 
         space_bottom = space_top + random_space_height
         
