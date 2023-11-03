@@ -25,7 +25,7 @@ class Home(GameScreen):
             if ev.type == pygame.MOUSEBUTTONDOWN:  
                 
                 if self.button.mouse_over():
-                    self.nav.navigate('game')
+                    self.nav.navigate('selection')
     
 
                     

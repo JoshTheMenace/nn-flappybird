@@ -5,6 +5,7 @@ from pipe import Pipe
 from math import ceil
 from bird import Bird
 from gamescreen import GameScreen
+from overlay import Overlay
 
 
 class Game(GameScreen):
@@ -14,6 +15,7 @@ class Game(GameScreen):
     pipes_sprite = pygame.sprite.Group()
     bird_sprite = pygame.sprite.GroupSingle()
     active = True
+    pause_overlay = Overlay()
     
 
     def __init__(self, nav, bird_type) -> None:
@@ -79,7 +81,8 @@ class Game(GameScreen):
 
         self.screen.blit(text_surface, (100,50))
         
-        
+        self.screen.blit(self.pause_overlay.bg, self.pause_overlay.rect) if self.active == False else ""
+
         self.frame_count += 1
         self.clock.tick(60)
 

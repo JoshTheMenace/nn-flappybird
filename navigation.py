@@ -4,9 +4,9 @@ from bird_selection import BirdSelection
 
 class Navigation:
     def __init__(self) -> None:
-        self.current_screen = BirdSelection(self)
+        self.current_screen = Home(self)
 
-    routes = {'home': Home, 'game': Game}
+    routes = {'home': Home, 'game': Game, 'selection': BirdSelection}
     
     def navigate(self, screen, bird = None):
         if bird:
