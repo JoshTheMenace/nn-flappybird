@@ -5,7 +5,9 @@ from pipe import Pipe
 from math import ceil
 from bird import Bird
 from gamescreen import GameScreen
+from button import Button
 from overlay import Overlay
+from constants import WIDTH, HEIGHT, CYAN, NewFont
 
 
 class Game(GameScreen):
@@ -14,6 +16,8 @@ class Game(GameScreen):
     game_state = "play"
     pipes_sprite = pygame.sprite.Group()
     bird_sprite = pygame.sprite.GroupSingle()
+    
+
     active = True
     pause_overlay = Overlay()
     
@@ -23,13 +27,33 @@ class Game(GameScreen):
         self.score = Score()
         
         self.gamefont = pygame.font.SysFont('Comic Sans MS', 30)
-        self.bg = Background(1280, 720)
+        self.bg = Background(WIDTH, HEIGHT)
         self.clock = pygame.time.Clock()
         
 
         self.bird = Bird(self.screen, bird_type)
         self.bird_sprite.add(self.bird)
+
+        self.jump_sound = pygame.mixer.Sound('audio/jump.mp3')
+        self.crash_sound = pygame.mixer.Sound('audio/crash.mp3')
+        self.jump_sound.set_volume(0.5)
+        self.crash_sound.set_volume(0.5)
+
+        self.death_screen = pygame.Surface((WIDTH / 3 * 2, HEIGHT / 3 * 2))
+        self.death_screen_rect = pygame.Rect(WIDTH / 6, HEIGHT / 6, WIDTH / 3 * 2, HEIGHT / 3 * 2)
+        self.death_screen.fill(CYAN)
+
+        self.gameover = NewFont('sitkaheading', 60, 'Game Over')
+        # self.gameover = NewFont('sitkabanner', 45, 'Score: ')
+        self.play_button = Button("Play Again", WIDTH/2 + Button.width / 6, HEIGHT/3*2)
+        self.home_button = Button("Home", WIDTH/2 - Button.width - Button.width / 6, HEIGHT/3*2)
         
+    def reset_game(self):
+        self.pipes_sprite.empty()
+        self.score.reset()
+        self.bird.rect.y = 50
+        self.bird.hit = False
+        self.active = True
 
     def screen_loop(self):
         for event in pygame.event.get():
@@ -38,15 +62,17 @@ class Game(GameScreen):
         
             if event.type == pygame.KEYDOWN and self.active == True:
                 if event.key == pygame.K_SPACE:
-                    self.bird.jump() if self.active == True else ""
+                    if self.active:
+                        self.jump_sound.play()
+                        self.bird.jump()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.active == False:
-                    self.pipes_sprite.empty()
-                    self.score.reset()
-                    self.bird.rect.y = 50
-                    self.bird.hit = False
-                    self.active = True
+                if self.play_button.mouse_over():
+                    if self.active == False:
+                        self.reset_game()
+                if self.home_button.mouse_over():
+                    self.reset_game()
+                    self.nav.navigate('home')
 
 
         self.bg.update(self.screen) 
@@ -62,8 +88,10 @@ class Game(GameScreen):
 
         for pipe in list(self.pipes_sprite):
             if(pygame.sprite.spritecollide(self.bird, self.pipes_sprite, 0)):
+                self.crash_sound.play() if self.active else ""
                 self.active = False
                 self.bird.hit = True
+                
     
             if(pipe.rect.x < 0 - Pipe.width):
                 self.remove_pipe(pipe)
@@ -81,7 +109,12 @@ class Game(GameScreen):
 
         self.screen.blit(text_surface, (100,50))
         
-        self.screen.blit(self.pause_overlay.bg, self.pause_overlay.rect) if self.active == False else ""
+        if not self.active:
+            self.screen.blit(self.pause_overlay.bg, self.pause_overlay.rect)
+            self.screen.blit(self.death_screen, self.death_screen_rect)
+            self.screen.blit(self.gameover.render_text('Game Over'), (self.gameover.horizontal_middle(), HEIGHT/3))  
+            self.home_button.draw(self.screen)
+            self.play_button.draw(self.screen)
 
         self.frame_count += 1
         self.clock.tick(60)

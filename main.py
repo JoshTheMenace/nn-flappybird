@@ -7,9 +7,9 @@ def main():
     pygame.init()
     pygame.font.init()
     pygame.mixer.init()
-    pygame.mixer.music.load("Waterflame - Glorious Morning 2.mp3")
+    pygame.mixer.music.load("audio/Waterflame - Glorious Morning 2.mp3")
     pygame.mixer.music.play(-1, fade_ms=3000)
-    pygame.display.set_caption("Flapping Birds")
+    pygame.display.set_caption("Flappy Flyer")
 
     nav = Navigation()
 

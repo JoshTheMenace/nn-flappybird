@@ -1,4 +1,5 @@
 import pygame
+from constants import GREEN
 
 
 class Pipe(pygame.sprite.Sprite):
@@ -9,7 +10,7 @@ class Pipe(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.Surface([Pipe.width, height])
-        self.image.fill("green")
+        self.image.fill('green')
 
         self.rect = pygame.Rect(x, top, width, height)
 

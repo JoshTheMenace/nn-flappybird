@@ -1,6 +1,6 @@
 import pygame  
 # from main import main
-from constants import NewFont, HEIGHT, WIDTH
+from constants import NewFont, HEIGHT, WIDTH, CYAN
 from button import Button
 from gamescreen import GameScreen
 
@@ -10,7 +10,7 @@ class Home(GameScreen):
     
     def __init__(self, nav) -> None:
         self.nav = nav
-        self.heading = NewFont('sitkaheading', 60, 'Flapping Birds')
+        self.heading = NewFont('sitkaheading', 60, 'Flappy Flyer')
 
         self.button = Button("Play", 100, 500)
 
@@ -29,12 +29,12 @@ class Home(GameScreen):
     
 
                     
-        self.screen.fill((84,194,204))  
+        self.screen.fill(CYAN)  
         
 
         self.button.draw(self.screen)
 
-        self.screen.blit(self.heading.render_text('Flappy Birds'), (self.heading.horizontal_middle(), HEIGHT/6))  
+        self.screen.blit(self.heading.render_text('Flappy Flyer'), (self.heading.horizontal_middle(), HEIGHT/6))  
   
 # while True: 
       
