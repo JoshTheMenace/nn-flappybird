@@ -13,16 +13,10 @@ def main():
     pygame.display.set_caption("Flappy Flyer")
 
     nav = Navigation()
-
-    # nav.current_screen.setup
     
-    while nav.current_screen.running and not isinstance(nav.current_screen, NNGame): 
-        # if(isinstance(nav.current_screen, NNGame)):
-        #     nav.navigate('home')
+    while nav.current_screen.running: 
         nav.current_screen.screen_loop()
-
         pygame.display.update()
-
     pygame.quit()
 
 

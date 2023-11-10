@@ -29,6 +29,7 @@ class Home(GameScreen):
                     self.nav.navigate('selection')
                 if self.button2.mouse_over():
                     self.nav.navigate('nn')
+                    self.nav.navigate('home')
     
 
                     

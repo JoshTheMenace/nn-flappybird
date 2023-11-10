@@ -61,14 +61,18 @@ class NNGame(GameScreen):
         p.add_reporter(stats)
         #p.add_reporter(neat.Checkpointer(5))
         self.gen = 0
+        self.run = True
         # Run for up to 50 generations.
-        winner = p.run(self.screen_loop, 50)
-
+        try:
+            winner = p.run(self.screen_loop, 50)
+        except TypeError: # catch error to break out of training loop
+            pass
 
 
         
     def reset_game(self):
         self.pipes_sprite.empty()
+        self.bird_sprite.empty()
         self.score.reset()
         for bird in self.birds:
             bird.rect.y = 50
@@ -76,19 +80,13 @@ class NNGame(GameScreen):
         self.active = True
 
     def screen_loop(self, genomes, config):
-        """
-        runs the simulation of the current population of
-        birds and sets their fitness based on the distance they
-        reach in the game.
-        """
         self.gen += 1
-        # start by creating lists holding the genome itself, the
-        # neural network associated with the genome and the
-        # bird object that uses that network to play
         nets = []
         self.birds = []
         ge = []
         for genome_id, genome in genomes:
+            if not self.run: 
+                break
             genome.fitness = 0  # start with fitness level of 0
             net = neat.nn.FeedForwardNetwork.create(genome, config)
             nets.append(net)
@@ -96,9 +94,8 @@ class NNGame(GameScreen):
             self.birds.append(bird)
             self.bird_sprite.add(bird)
             ge.append(genome)
-            
-        run = True
-        while run and len(self.birds) > 0:
+        
+        while self.run and len(self.birds) > 0:
             pipes = list(self.pipes_sprite)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -120,6 +117,8 @@ class NNGame(GameScreen):
                     if self.home_button.mouse_over():
                         self.reset_game()
                         self.nav.navigate('home')
+                        self.run = False
+                        raise TypeError("Break out")
 
             pipe_ind = 0
             
@@ -130,7 +129,7 @@ class NNGame(GameScreen):
                     # send bird location, top pipe location and bottom pipe location and determine from network whether to jump or not
                     output = nets[self.birds.index(bird)].activate((bird.rect.y, abs(bird.rect.y - pipes[pipe_ind].rect.height), abs(bird.rect.y - pipes[pipe_ind + 1].rect.top)))
 
-                    if output[0] > 0.5:  # we use a tanh activation function so result will be between -1 and 1. if over 0.5 jump
+                    if output[0] > 0.5:  # we use a tanh activation function so result will be between -1 and 1. if over 0.5, jump
                         bird.jump()
             if(self.frame_count % 10 == 0 and len(pipes) > 0):
                 print(f"Y: {self.birds[0].rect.y}, TOP: {pipes[pipe_ind + 1].rect.top}, BOTTOM: {pipes[pipe_ind].rect.bottom}")
