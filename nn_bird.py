@@ -96,22 +96,22 @@ class NNGame(GameScreen):
             self.birds.append(bird)
             self.bird_sprite.add(bird)
             ge.append(genome)
+            
         run = True
-        # self.create_pipes()
         while run and len(self.birds) > 0:
             pipes = list(self.pipes_sprite)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
             
-                if event.type == pygame.KEYDOWN and self.active == True:
-                    if event.key == pygame.K_SPACE:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE and self.active == True:
                         if self.active:
                             self.jump_sound.play()
                             for bird in self.birds:
                                 bird.jump()
                     if event.key == pygame.K_ESCAPE:
-                        self.active = False
+                        self.active = False if self.active else True
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.play_button.mouse_over():
