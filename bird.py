@@ -21,7 +21,7 @@ class Bird(pygame.sprite.Sprite):
 
     gravity = 0.8
     velocity = 0
-    jump_val = -12
+    jump_val = -11
 
 
     def update(self):

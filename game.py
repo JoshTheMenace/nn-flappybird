@@ -1,7 +1,7 @@
 from score import Score
 import random
 import pygame
-from pipe import Pipe
+from pipe import Pipe, BluePipe
 from math import ceil
 from bird import Bird
 from gamescreen import GameScreen
@@ -103,8 +103,6 @@ class Game(GameScreen):
         self.pipes_sprite.draw(self.screen)
         self.bird_sprite.update()
         self.bird_sprite.draw(self.screen)
-
-
                 
 
         self.screen.blit(text_surface, (100,50))
@@ -127,8 +125,11 @@ class Game(GameScreen):
         random_space_height = random.randint(150,230) # random int pixel space for bird to go through
         space_top = int(random.randint(50, y - 50 - random_space_height)) # choose a random value from y 50 to screen height - 110 
         space_bottom = space_top + random_space_height
-        
-        self.pipes_sprite.add(Pipe(x, 0, Pipe.width, space_top), Pipe(x, space_bottom, Pipe.width, y - space_bottom))
+        direction = random.choice([1,-1])
+        if random.randint(0,4) == 0:
+            self.pipes_sprite.add(BluePipe(x, 0, Pipe.width, space_top, random_space_height, direction), BluePipe(x, space_bottom, Pipe.width, y - space_bottom, random_space_height, direction))
+        else:
+            self.pipes_sprite.add(Pipe(x, 0, Pipe.width, space_top), Pipe(x, space_bottom, Pipe.width, y - space_bottom))
 
     def remove_pipe(self, pipe):
         self.pipes_sprite.remove(pipe)
