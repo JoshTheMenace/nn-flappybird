@@ -17,6 +17,7 @@ class Bird(pygame.sprite.Sprite):
         self.image = self.images[math.ceil(self.index)]
 
         self.rect = self.image.get_rect()
+        self.rect.y = 200
 
     gravity = 0.8
     velocity = 0

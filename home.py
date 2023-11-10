@@ -13,6 +13,7 @@ class Home(GameScreen):
         self.heading = NewFont('sitkaheading', 60, 'Flappy Flyer')
 
         self.button = Button("Play", 100, 500)
+        self.button2 = Button("NN", 600, 500)
 
   
 
@@ -26,6 +27,8 @@ class Home(GameScreen):
                 
                 if self.button.mouse_over():
                     self.nav.navigate('selection')
+                if self.button2.mouse_over():
+                    self.nav.navigate('nn')
     
 
                     
@@ -33,6 +36,7 @@ class Home(GameScreen):
         
 
         self.button.draw(self.screen)
+        self.button2.draw(self.screen)
 
         self.screen.blit(self.heading.render_text('Flappy Flyer'), (self.heading.horizontal_middle(), HEIGHT/6))  
   

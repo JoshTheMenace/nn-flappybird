@@ -1,5 +1,6 @@
 import pygame
 from navigation import Navigation
+from nn_bird import NNGame
 
 
 def main():
@@ -13,9 +14,11 @@ def main():
 
     nav = Navigation()
 
- 
-    while nav.current_screen.running: 
-
+    # nav.current_screen.setup
+    
+    while nav.current_screen.running and not isinstance(nav.current_screen, NNGame): 
+        # if(isinstance(nav.current_screen, NNGame)):
+        #     nav.navigate('home')
         nav.current_screen.screen_loop()
 
         pygame.display.update()
