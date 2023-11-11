@@ -32,8 +32,7 @@ class NNGame(GameScreen):
         self.clock = pygame.time.Clock()
         
         self.bird_type = bird_type
-        # self.bird = Bird(self.screen, bird_type)
-        # self.bird_sprite.add(self.bird)
+        self.gamespeed = 60
 
         self.jump_sound = pygame.mixer.Sound('audio/jump.mp3')
         self.crash_sound = pygame.mixer.Sound('audio/crash.mp3')
@@ -49,7 +48,8 @@ class NNGame(GameScreen):
         self.play_button = Button("Play Again", WIDTH/2 + Button.width / 6, HEIGHT/3*2)
         self.home_button = Button("Home", WIDTH/2 - Button.width - Button.width / 6, HEIGHT/3*2)
 
-
+        self.ff_toggle = ToggleButton(WIDTH-150, 25, 50, 50, ["images/ff_on.png","images/ff_off.png"])
+        self.sound_toggle = ToggleButton(WIDTH-75, 25, 50, 50, ["images/sound_on.png","images/sound_off.png"])
 
         self.config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
@@ -119,6 +119,12 @@ class NNGame(GameScreen):
                         self.nav.navigate('home')
                         self.run = False
                         raise TypeError("Break out")
+                    if self.ff_toggle.mouse_over() and self.active:
+                        self.ff_toggle.image = self.ff_toggle.on if self.ff_toggle.image == self.ff_toggle.off else self.ff_toggle.off
+                        self.gamespeed = 120 if self.ff_toggle.image == self.ff_toggle.on else 60
+                    if self.sound_toggle.mouse_over():
+                        self.sound_toggle.image = self.sound_toggle.on if self.sound_toggle.image == self.sound_toggle.off else self.sound_toggle.off
+                        pygame.mixer.music.set_volume(0) if self.sound_toggle.image == self.sound_toggle.on else pygame.mixer.music.set_volume(1)
 
             pipe_ind = 0
             
@@ -181,6 +187,8 @@ class NNGame(GameScreen):
             self.screen.blit(score_surface, (100,25))
             self.screen.blit(bird_count_surface, (100,75))
             self.screen.blit(gen_surface, (100,125))
+
+            self.screen.blit(self.ff_toggle.image, (self.ff_toggle.x, self.ff_toggle.y)) 
             
             if not self.active:
                 self.screen.blit(self.pause_overlay.bg, self.pause_overlay.rect)
@@ -189,8 +197,10 @@ class NNGame(GameScreen):
                 self.home_button.draw(self.screen)
                 self.play_button.draw(self.screen)
 
+            self.screen.blit(self.sound_toggle.image, (self.sound_toggle.x, self.sound_toggle.y)) 
+
             self.frame_count += 1
-            self.clock.tick(60)
+            self.clock.tick(self.gamespeed)
 
             pygame.display.update()
 
@@ -243,3 +253,19 @@ class Background:
         # RESET THE SCROLL FRAME 
         if abs(self.scroll) > self.bg.get_width(): 
             self.scroll = 0
+
+
+class ToggleButton(Button):
+    def __init__(self, x, y, width, height, images: []) -> None:
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        off = pygame.image.load(images[0]).convert_alpha()
+        self.off = pygame.transform.scale(off, (width, height))
+        on = pygame.image.load(images[1]).convert_alpha()
+        self.on = pygame.transform.scale(on, (width, height))
+        self.image = self.off
+        self.active = False
+        self.rect = pygame.Rect(x, y, width, height)
+        self.bg = pygame.Surface([width, height])
