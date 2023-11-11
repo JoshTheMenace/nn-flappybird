@@ -49,6 +49,8 @@ class Game(GameScreen):
         # self.gameover = NewFont('sitkabanner', 45, 'Score: ')
         self.play_button = Button("Play Again", WIDTH/2 + Button.width / 6, HEIGHT/3*2)
         self.home_button = Button("Home", WIDTH/2 - Button.width - Button.width / 6, HEIGHT/3*2)
+
+        self.sound_toggle = PauseButton(WIDTH-75, 25, 50, 50, ["images/sound_on.png","images/sound_off.png"])
         
     def reset_game(self):
         self.pipes_sprite.empty()
@@ -66,7 +68,7 @@ class Game(GameScreen):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and self.active == True:
                     if self.active:
-                        self.jump_sound.play()
+                        self.jump_sound.play() if self.sound_toggle.image == self.sound_toggle.off else ""
                         self.bird.jump()
                 if event.key == pygame.K_ESCAPE and not self.bird.hit:
                         self.paused = False if self.paused else True
@@ -79,12 +81,15 @@ class Game(GameScreen):
                 if self.home_button.mouse_over():
                     self.reset_game()
                     self.nav.navigate('home')
+                if self.sound_toggle.mouse_over():
+                    self.sound_toggle.image = self.sound_toggle.on if self.sound_toggle.image == self.sound_toggle.off else self.sound_toggle.off
+                    pygame.mixer.music.set_volume(0) if self.sound_toggle.image == self.sound_toggle.on else pygame.mixer.music.set_volume(1)
 
 
         self.bg.update(self.screen) 
         self.bg.scroll_frame() if self.active else ""
 
-        text_surface = self.gamefont.render(f"Score: {str(self.score.normalize())}", False, (0, 0, 0))
+        score_text = self.gamefont.render(f"Score: {str(self.score.normalize())}", False, (0, 0, 0))
         
 
         if(self.frame_count % 120 == 0):
@@ -94,7 +99,7 @@ class Game(GameScreen):
 
         for pipe in list(self.pipes_sprite):
             if(pygame.sprite.spritecollide(self.bird, self.pipes_sprite, 0)):
-                self.crash_sound.play() if self.active else ""
+                self.crash_sound.play() if self.active and self.sound_toggle.image == self.sound_toggle.off else ""
                 self.active = False
                 self.bird.hit = True
                 
@@ -111,7 +116,7 @@ class Game(GameScreen):
         self.bird_sprite.draw(self.screen)
                 
 
-        self.screen.blit(text_surface, (100,50))
+        self.screen.blit(score_text, (100,50))
         
         if self.paused:
             self.screen.blit(self.pause_overlay.bg, self.pause_overlay.rect)
@@ -126,6 +131,8 @@ class Game(GameScreen):
             self.screen.blit(self.game_over_text.render_text('Game Over'), (self.game_over_text.horizontal_middle(), HEIGHT/3))  
             self.home_button.draw(self.screen)
             self.play_button.draw(self.screen)
+
+        self.screen.blit(self.sound_toggle.image, (self.sound_toggle.x, self.sound_toggle.y)) 
 
         self.frame_count += 1
         self.clock.tick(60)
@@ -151,7 +158,7 @@ class Background:
 
     def __init__(self, width, height) -> None:
         # IMAGE 
-        bg = pygame.image.load("bg.png").convert() 
+        bg = pygame.image.load("images/bg.png").convert() 
         self.bg = pygame.transform.scale(bg, (width, height))
         
         # DEFINING MAIN VARIABLES IN SCROLLING 
@@ -176,3 +183,18 @@ class Background:
         # RESET THE SCROLL FRAME 
         if abs(self.scroll) > self.bg.get_width(): 
             self.scroll = 0
+
+class PauseButton(Button):
+    def __init__(self, x, y, width, height, images: []) -> None:
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        off = pygame.image.load(images[0]).convert_alpha()
+        self.off = pygame.transform.scale(off, (width, height))
+        on = pygame.image.load(images[1]).convert_alpha()
+        self.on = pygame.transform.scale(on, (width, height))
+        self.image = self.off
+        self.active = False
+        self.rect = pygame.Rect(x, y, width, height)
+        self.bg = pygame.Surface([width, height])

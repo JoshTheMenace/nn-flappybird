@@ -9,7 +9,7 @@ class BirdSelection(GameScreen):
     
     def __init__(self, nav) -> None:
         self.nav = nav
-        self.heading = NewFont('sitkaheading', 60, 'Choose Your Player!') # TODO: Add choose your player sound file
+        self.heading = NewFont('sitkaheading', 50, 'Choose Your Player!') # TODO: Add choose your player sound file
 
         self.play_button = Button("Regular", WIDTH / 3 - 120, 500)
         self.ai_play_button = Button("AI Bird", WIDTH / 3 * 2 - 120, 500)
@@ -59,14 +59,13 @@ class BirdSelection(GameScreen):
         self.screen.fill((84,194,204))  
         
         for count, bird_button in enumerate(self.bird_buttons):
-            # print(count, bird)
             self.screen.blit(self.bird_buttons[count].bg, self.bird_buttons[count].rect)
             self.screen.blit(self.bird_buttons[count].bird, self.bird_buttons[count].rect)
             
         self.play_button.draw(self.screen)
         self.ai_play_button.draw(self.screen)
 
-        # self.screen.blit(self.heading.render_text('Flappy Birds'), (self.heading.horizontal_middle(), HEIGHT/6))  
+        self.screen.blit(self.heading.render_text('Choose Your Player!'), (self.heading.horizontal_middle(), HEIGHT/7))  
 
 class BirdButton(Button):
     def __init__(self, x, y, width, height, bird) -> None:

@@ -131,8 +131,6 @@ class NNGame(GameScreen):
 
                     if output[0] > 0.5:  # we use a tanh activation function so result will be between -1 and 1. if over 0.5, jump
                         bird.jump()
-            if(self.frame_count % 10 == 0 and len(pipes) > 0):
-                print(f"Y: {self.birds[0].rect.y}, TOP: {pipes[pipe_ind + 1].rect.top}, BOTTOM: {pipes[pipe_ind].rect.bottom}")
 
             self.bg.update(self.screen) 
             self.bg.scroll_frame() if self.active else ""
@@ -197,14 +195,17 @@ class NNGame(GameScreen):
             pygame.display.update()
 
     def create_pipes(self):
+        blue_chance = random.randint(0,3)
         x = self.screen.get_width()
         y = self.screen.get_height()
-        
-        random_space_height = random.randint(150,230) # random int pixel space for bird to go through
+        if blue_chance == 0:
+            random_space_height = random.randint(175,240) # Extra space for blue moving pipes
+        else:
+            random_space_height = random.randint(150,230) # random int pixel space for bird to go through
         space_top = int(random.randint(50, y - 50 - random_space_height)) # choose a random value from y 50 to screen height - 110 
         space_bottom = space_top + random_space_height
         direction = random.choice([1,-1])
-        if random.randint(0,4) == 0:
+        if blue_chance == 0:
             self.pipes_sprite.add(BluePipe(x, 0, Pipe.width, space_top, random_space_height, direction), BluePipe(x, space_bottom, Pipe.width, y - space_bottom, random_space_height, direction))
         else:
             self.pipes_sprite.add(Pipe(x, 0, Pipe.width, space_top), Pipe(x, space_bottom, Pipe.width, y - space_bottom))
@@ -217,7 +218,7 @@ class Background:
 
     def __init__(self, width, height) -> None:
         # IMAGE 
-        bg = pygame.image.load("bg.png").convert() 
+        bg = pygame.image.load("images/bg.png").convert() 
         self.bg = pygame.transform.scale(bg, (width, height))
         
         # DEFINING MAIN VARIABLES IN SCROLLING 
