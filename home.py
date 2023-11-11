@@ -11,9 +11,9 @@ class Home(GameScreen):
     def __init__(self, nav) -> None:
         self.nav = nav
         self.heading = NewFont('sitkaheading', 60, 'Flappy Flyer')
+        self.sub_title = NewFont('trebuchet', 35, 'By: Josh Gimenes')
 
-        self.button = Button("Play", 100, 500)
-        self.button2 = Button("NN", 600, 500)
+        self.select_button = Button("Select Bird", WIDTH / 2 - 120, 500)
 
   
 
@@ -25,44 +25,16 @@ class Home(GameScreen):
                 
             if ev.type == pygame.MOUSEBUTTONDOWN:  
                 
-                if self.button.mouse_over():
+                if self.select_button.mouse_over():
                     self.nav.navigate('selection')
-                if self.button2.mouse_over():
-                    self.nav.navigate('nn')
-                    self.nav.navigate('home')
     
 
                     
         self.screen.fill(CYAN)  
         
 
-        self.button.draw(self.screen)
-        self.button2.draw(self.screen)
+        self.select_button.draw(self.screen)
 
         self.screen.blit(self.heading.render_text('Flappy Flyer'), (self.heading.horizontal_middle(), HEIGHT/6))  
+        self.screen.blit(self.sub_title.render_text('By: Josh Gimenes'), (self.sub_title.horizontal_middle(), HEIGHT/3))  
   
-# while True: 
-      
-#     for ev in pygame.event.get():  
-          
-#         if ev.type == pygame.QUIT:  
-#             pygame.quit()  
-              
-#         if ev.type == pygame.MOUSEBUTTONDOWN:  
-            
-#             if button.mouse_over():
-#                 main()
-    
-
-                  
-#     screen.fill((84,194,204))  
-      
-
-#     button.draw(screen)
-
-      
-      
-#     screen.blit(heading.render_text('Flappy Birds'), (heading.horizontal_middle(), HEIGHT/6))  
-      
-#     # updates the frames of the game  
-#     pygame.display.update()  

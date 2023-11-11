@@ -19,6 +19,7 @@ class Game(GameScreen):
     
 
     active = True
+    paused = False
     pause_overlay = Overlay()
     
 
@@ -43,7 +44,8 @@ class Game(GameScreen):
         self.death_screen_rect = pygame.Rect(WIDTH / 6, HEIGHT / 6, WIDTH / 3 * 2, HEIGHT / 3 * 2)
         self.death_screen.fill(CYAN)
 
-        self.gameover = NewFont('sitkaheading', 60, 'Game Over')
+        self.game_over_text = NewFont('sitkaheading', 60, 'Game Over')
+        self.game_paused_text = NewFont('sitkaheading', 60, 'Game Paused')
         # self.gameover = NewFont('sitkabanner', 45, 'Score: ')
         self.play_button = Button("Play Again", WIDTH/2 + Button.width / 6, HEIGHT/3*2)
         self.home_button = Button("Home", WIDTH/2 - Button.width - Button.width / 6, HEIGHT/3*2)
@@ -54,17 +56,21 @@ class Game(GameScreen):
         self.bird.rect.y = 50
         self.bird.hit = False
         self.active = True
+        self.paused = False
 
     def screen_loop(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
         
-            if event.type == pygame.KEYDOWN and self.active == True:
-                if event.key == pygame.K_SPACE:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and self.active == True:
                     if self.active:
                         self.jump_sound.play()
                         self.bird.jump()
+                if event.key == pygame.K_ESCAPE and not self.bird.hit:
+                        self.paused = False if self.paused else True
+                        self.active = False if self.active else True
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.play_button.mouse_over():
@@ -101,16 +107,23 @@ class Game(GameScreen):
             self.pipes_sprite.update()
 
         self.pipes_sprite.draw(self.screen)
-        self.bird_sprite.update()
+        self.bird_sprite.update() if not self.paused else ""
         self.bird_sprite.draw(self.screen)
                 
 
         self.screen.blit(text_surface, (100,50))
         
-        if not self.active:
+        if self.paused:
             self.screen.blit(self.pause_overlay.bg, self.pause_overlay.rect)
             self.screen.blit(self.death_screen, self.death_screen_rect)
-            self.screen.blit(self.gameover.render_text('Game Over'), (self.gameover.horizontal_middle(), HEIGHT/3))  
+            self.screen.blit(self.game_paused_text.render_text('Game Paused'), (self.game_paused_text.horizontal_middle(), HEIGHT/3))  
+            self.home_button.draw(self.screen)
+            self.play_button.draw(self.screen)
+
+        if not self.active and not self.paused:
+            self.screen.blit(self.pause_overlay.bg, self.pause_overlay.rect)
+            self.screen.blit(self.death_screen, self.death_screen_rect)
+            self.screen.blit(self.game_over_text.render_text('Game Over'), (self.game_over_text.horizontal_middle(), HEIGHT/3))  
             self.home_button.draw(self.screen)
             self.play_button.draw(self.screen)
 

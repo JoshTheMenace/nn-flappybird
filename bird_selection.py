@@ -9,14 +9,15 @@ class BirdSelection(GameScreen):
     
     def __init__(self, nav) -> None:
         self.nav = nav
-        self.heading = NewFont('sitkaheading', 60, 'Choose Your Player!')
+        self.heading = NewFont('sitkaheading', 60, 'Choose Your Player!') # TODO: Add choose your player sound file
 
-        self.button = Button("Play", 100, 500)
-
+        self.play_button = Button("Regular", WIDTH / 3 - 120, 500)
+        self.ai_play_button = Button("AI Bird", WIDTH / 3 * 2 - 120, 500)
+        self.type = None
         self.bird_buttons = []
         self.birds, self.types = Sprite_Collection.get_all_birds()
         for count, bird in enumerate(self.birds):
-            self.bird_buttons.append(BirdButton(100 + count * 150, 200, 128, 100, bird))
+            self.bird_buttons.append(BirdButton(275 + count * 150, 200, 128, 100, bird))
         # self.rects = [pygame.Rect(100 + count * 150, 200, 128, 100) for count in range(len(self.birds))]
         
 
@@ -30,17 +31,27 @@ class BirdSelection(GameScreen):
                 
             if ev.type == pygame.MOUSEBUTTONDOWN:  
                 
-                if self.button.mouse_over():
-                    self.nav.navigate('game')
+                if self.play_button.mouse_over():
+                    if(self.type):
+                        self.nav.navigate('game', self.type)
+
+                if self.ai_play_button.mouse_over():
+                    if(self.type):
+                        self.nav.navigate('nn', self.type)
+                        self.nav.navigate('home')
             
                 for count, bird_button in enumerate(self.bird_buttons):
                     if bird_button.mouse_over():
-                        self.nav.navigate('game', self.types[count])
+                        self.type = self.types[count]
+                        for bird in self.bird_buttons:
+                            bird.active = False
+                        bird_button.active = True
+                        # self.nav.navigate('game', self.types[count])
 
 
         
         for count, bird_button in enumerate(self.bird_buttons):
-            if bird_button.mouse_over():
+            if bird_button.mouse_over() or bird_button.active:
                 self.bird_buttons[count].bg.set_alpha(255)
             else:
                 self.bird_buttons[count].bg.set_alpha(0)
@@ -52,7 +63,8 @@ class BirdSelection(GameScreen):
             self.screen.blit(self.bird_buttons[count].bg, self.bird_buttons[count].rect)
             self.screen.blit(self.bird_buttons[count].bird, self.bird_buttons[count].rect)
             
-        # self.button.draw(self.screen)
+        self.play_button.draw(self.screen)
+        self.ai_play_button.draw(self.screen)
 
         # self.screen.blit(self.heading.render_text('Flappy Birds'), (self.heading.horizontal_middle(), HEIGHT/6))  
 
@@ -63,6 +75,7 @@ class BirdButton(Button):
         self.width = width
         self.height = height
         self.bird = bird
+        self.active = False
         self.rect = pygame.Rect(x, y, width, height)
         self.bg = pygame.Surface([width, height])
         self.bg.fill("red")
