@@ -1,13 +1,13 @@
 from pygame import mouse, Rect, draw
-from constants import NewFont
+from constants import NewFont, ORANGE, WHITE
 
 class Button():
     width = 240
     height = 100
-    color = 'orange'
-    hover_color = 'yellow'
-    text_color = 'white'
-    text_hover_color = 'black'
+    color = ORANGE
+    hover_color = WHITE
+    text_color = WHITE
+    text_hover_color = ORANGE
 
     def __init__(self, text, x, y) -> None:
         self.text = text
@@ -33,4 +33,3 @@ class Button():
                 return True
         return False
     
-

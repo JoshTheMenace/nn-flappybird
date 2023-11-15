@@ -6,6 +6,9 @@ HEIGHT = 720
 BLACK    = (   0,   0,   0) 
 WHITE    = ( 255, 255, 254) 
 BLUE     = (   0,   0, 255)
+CYAN = (84,194,204)
+ORANGE = (229, 95, 0)
+GREEN = (175, 226, 86)
 
 class NewFont():
     button_font = 'trebuchetms'
