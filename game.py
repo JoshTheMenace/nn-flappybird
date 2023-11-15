@@ -11,13 +11,11 @@ from constants import WIDTH, HEIGHT, CYAN, NewFont
 
 
 class Game(GameScreen):
-
     frame_count = 0
     game_state = "play"
     pipes_sprite = pygame.sprite.Group()
     bird_sprite = pygame.sprite.GroupSingle()
     
-
     active = True
     paused = False
     pause_overlay = Overlay()
@@ -46,7 +44,6 @@ class Game(GameScreen):
 
         self.game_over_text = NewFont('sitkaheading', 60, 'Game Over')
         self.game_paused_text = NewFont('sitkaheading', 60, 'Game Paused')
-        # self.gameover = NewFont('sitkabanner', 45, 'Score: ')
         self.play_button = Button("Play Again", WIDTH/2 + Button.width / 6, HEIGHT/3*2)
         self.home_button = Button("Home", WIDTH/2 - Button.width - Button.width / 6, HEIGHT/3*2)
 
@@ -103,7 +100,6 @@ class Game(GameScreen):
                 self.active = False
                 self.bird.hit = True
                 
-    
             if(pipe.rect.x < 0 - Pipe.width):
                 self.remove_pipe(pipe)
                 self.score.increase()
@@ -115,7 +111,6 @@ class Game(GameScreen):
         self.bird_sprite.update() if not self.paused else ""
         self.bird_sprite.draw(self.screen)
                 
-
         self.screen.blit(score_text, (100,50))
         
         if self.paused:
@@ -157,16 +152,10 @@ class Game(GameScreen):
 class Background:
 
     def __init__(self, width, height) -> None:
-        # IMAGE 
         bg = pygame.image.load("images/bg.png").convert() 
         self.bg = pygame.transform.scale(bg, (width, height))
         
-        # DEFINING MAIN VARIABLES IN SCROLLING 
         self.scroll = 0
-        
-        # CHANGE THE BELOW 1 TO UPPER NUMBER IF 
-        # YOU GET BUFFERING OF THE IMAGE 
-        # HERE 1 IS THE CONSTATNT FOR REMOVING BUFFERING 
         self.tiles = ceil(width / bg.get_width()) + 1
 
     def update(self, screen):
@@ -177,10 +166,8 @@ class Background:
        
 
     def scroll_frame(self):
-        # FRAME FOR SCROLLING 
         self.scroll -= 2
     
-        # RESET THE SCROLL FRAME 
         if abs(self.scroll) > self.bg.get_width(): 
             self.scroll = 0
 

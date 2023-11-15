@@ -1,5 +1,5 @@
 import os
-from pygame import image, transform, SRCALPHA
+from pygame import image, transform
 
 class Sprite_Collection:
 
@@ -28,23 +28,6 @@ class Sprite_Collection:
         for file_name in os.listdir("birds"):
             images = os.listdir("birds" + os.sep + file_name +"/flying")
             img = image.load("birds" + os.sep + file_name +"/flying/" + images[0]).convert_alpha()
-            # img = img.set_aa(pygame.SRCALPHA)
-            # img = image.load(path + "/flying" + os.sep + file_name).convert_alpha()
             birds.append(transform.scale(img, (128, 100)))
             types.append(file_name)
         return birds, types
-    
-
-
-    
-
-class Sprite_Animation:
-
-    def load_images():
-        red = [[],
-               []]
-        chicken = [['frame-1.png'],
-                   []]
-
-    def update(self):
-        pass

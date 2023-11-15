@@ -1,5 +1,5 @@
 import pygame
-from constants import GREEN, HEIGHT
+from constants import HEIGHT
 
 
 class Pipe(pygame.sprite.Sprite):
@@ -11,14 +11,11 @@ class Pipe(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([Pipe.width, height])
         self.image.fill('green')
-
         self.rect = pygame.Rect(x, top, width, height)
 
     def update(self):
         self.rect.x -= self.speed
 
-    def draw(self):
-        pass
 
 class BluePipe(Pipe, pygame.sprite.Sprite):
     width = 70
@@ -30,17 +27,14 @@ class BluePipe(Pipe, pygame.sprite.Sprite):
         self.type = "top" if top == 0 else "bottom"
         self.gap_distance = gap_distance
             
-
         self.image = pygame.Surface([Pipe.width, height])
         self.image.fill('blue')
-
         self.rect = pygame.Rect(x, top, width, height)
 
         self.direction = direction
 
     def update(self):
         self.rect.x -= self.speed
-        # print(self.rect.y, self.rect.top)
         if self.direction == 1:
             if self.rect.top == 0:
                 if self.rect.height <= self.yspeed * 3:
@@ -68,8 +62,4 @@ class BluePipe(Pipe, pygame.sprite.Sprite):
                 self.rect = pygame.Rect(self.rect.x, self.rect.top + self.yspeed, self.rect.width, self.rect.height - self.yspeed)
                 self.image = pygame.Surface([Pipe.width, self.rect.height - self.yspeed])
                 self.image.fill('blue')
-                
-
-    def draw(self):
-        pass
 

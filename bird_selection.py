@@ -18,19 +18,16 @@ class BirdSelection(GameScreen):
         self.birds, self.types = Sprite_Collection.get_all_birds()
         for count, bird in enumerate(self.birds):
             self.bird_buttons.append(BirdButton(275 + count * 150, 200, 128, 100, bird))
-        # self.rects = [pygame.Rect(100 + count * 150, 200, 128, 100) for count in range(len(self.birds))]
         
-
   
 
     def screen_loop(self):
+
         for ev in pygame.event.get():  
-          
             if ev.type == pygame.QUIT:  
                 self.running = False
                 
             if ev.type == pygame.MOUSEBUTTONDOWN:  
-                
                 if self.play_button.mouse_over():
                     if(self.type):
                         self.nav.navigate('game', self.type)
@@ -46,8 +43,6 @@ class BirdSelection(GameScreen):
                         for bird in self.bird_buttons:
                             bird.active = False
                         bird_button.active = True
-                        # self.nav.navigate('game', self.types[count])
-
 
         
         for count, bird_button in enumerate(self.bird_buttons):
@@ -78,5 +73,3 @@ class BirdButton(Button):
         self.rect = pygame.Rect(x, y, width, height)
         self.bg = pygame.Surface([width, height])
         self.bg.fill("red")
-
-        # super().__init__(text, x, y)

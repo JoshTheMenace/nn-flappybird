@@ -1,9 +1,7 @@
 import pygame  
-# from main import main
 from constants import NewFont, HEIGHT, WIDTH, CYAN
 from button import Button
 from gamescreen import GameScreen
-
 
 
 class Home(GameScreen):
@@ -15,7 +13,6 @@ class Home(GameScreen):
 
         self.select_button = Button("Select Bird", WIDTH / 2 - 120, 500)
 
-  
 
     def screen_loop(self):
         for ev in pygame.event.get():  
@@ -27,12 +24,8 @@ class Home(GameScreen):
                 
                 if self.select_button.mouse_over():
                     self.nav.navigate('selection')
-    
-
                     
         self.screen.fill(CYAN)  
-        
-
         self.select_button.draw(self.screen)
 
         self.screen.blit(self.heading.render_text('Flappy Flyer'), (self.heading.horizontal_middle(), HEIGHT/6))  

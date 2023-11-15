@@ -7,6 +7,3 @@ class Overlay():
         self.bg.fill("black")
         self.bg.set_alpha(100)
         self.rect = self.bg.get_rect()
-
-    # def render(self, screen):
-    #     screen.bli

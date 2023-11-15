@@ -12,8 +12,6 @@ class Navigation:
     def navigate(self, screen, bird = 'chicken'):
         if screen == 'nn' or screen == 'game':
             self.current_screen = self.routes[screen](self, bird)
-        # if bird:
-        #     self.current_screen = self.routes[screen](self, bird)
         else:
             self.current_screen = self.routes[screen](self)
 

@@ -13,7 +13,6 @@ class Bird(pygame.sprite.Sprite):
         self.index = 0
         self.screen = screen
         self.hit = False
-        # self.image = pygame.image.load("bird.png").convert_alpha()
         self.image = self.images[math.ceil(self.index)]
 
         self.rect = self.image.get_rect()
@@ -27,9 +26,6 @@ class Bird(pygame.sprite.Sprite):
     def update(self):
         
         self.images = self.sprites.alive_images if self.hit == False else self.sprites.dead_images
-
-        # if self.hit:
-
         self.index += (0.1 * self.sprites.factor) if self.hit else 0.1
 
         if math.ceil(self.index) > len(self.images) -1:
@@ -38,7 +34,6 @@ class Bird(pygame.sprite.Sprite):
         self.image = self.images[math.ceil(self.index)]
 
         self.velocity += self.gravity
-        # self.velocity *= 0.9
         self.rect.y += self.velocity
 
         if(self.rect.bottom >= self.screen.get_height()): # restrict y bottom
@@ -50,8 +45,5 @@ class Bird(pygame.sprite.Sprite):
             self.velocity = 0
 
     def jump(self):
-        if (self.velocity > -5): # if the last jump was 7 frames or more ago
+        if (self.velocity > -5): # if the last jump was 6 frames or more ago
             self.velocity = self.jump_val
-            
-
-        

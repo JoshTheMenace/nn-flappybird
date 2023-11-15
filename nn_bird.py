@@ -18,7 +18,6 @@ class NNGame(GameScreen):
     pipes_sprite = pygame.sprite.Group()
     bird_sprite = pygame.sprite.Group()
     
-
     active = True
     pause_overlay = Overlay()
     
@@ -44,7 +43,6 @@ class NNGame(GameScreen):
         self.death_screen.fill(CYAN)
 
         self.gameover = NewFont('sitkaheading', 60, 'Game Over')
-        # self.gameover = NewFont('sitkabanner', 45, 'Score: ')
         self.play_button = Button("Play Again", WIDTH/2 + Button.width / 6, HEIGHT/3*2)
         self.home_button = Button("Home", WIDTH/2 - Button.width - Button.width / 6, HEIGHT/3*2)
 
@@ -59,12 +57,11 @@ class NNGame(GameScreen):
         p.add_reporter(neat.StdOutReporter(True))
         stats = neat.StatisticsReporter()
         p.add_reporter(stats)
-        #p.add_reporter(neat.Checkpointer(5))
         self.gen = 0
         self.run = True
         # Run for up to 50 generations.
         try:
-            winner = p.run(self.screen_loop, 50)
+            p.run(self.screen_loop, 50)
         except TypeError: # catch error to break out of training loop
             pass
 
@@ -227,16 +224,10 @@ class NNGame(GameScreen):
 class Background:
 
     def __init__(self, width, height) -> None:
-        # IMAGE 
         bg = pygame.image.load("images/bg.png").convert() 
         self.bg = pygame.transform.scale(bg, (width, height))
         
-        # DEFINING MAIN VARIABLES IN SCROLLING 
         self.scroll = 0
-        
-        # CHANGE THE BELOW 1 TO UPPER NUMBER IF 
-        # YOU GET BUFFERING OF THE IMAGE 
-        # HERE 1 IS THE CONSTATNT FOR REMOVING BUFFERING 
         self.tiles = ceil(width / bg.get_width()) + 1
 
     def update(self, screen):
@@ -247,10 +238,8 @@ class Background:
        
 
     def scroll_frame(self):
-        # FRAME FOR SCROLLING 
         self.scroll -= 2
     
-        # RESET THE SCROLL FRAME 
         if abs(self.scroll) > self.bg.get_width(): 
             self.scroll = 0
 
