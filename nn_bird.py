@@ -43,8 +43,9 @@ class NNGame(GameScreen):
         self.death_screen.fill(CYAN)
 
         self.gameover = NewFont('sitkaheading', 60, 'Game Over')
-        self.play_button = Button("Play Again", WIDTH/2 + Button.width / 6, HEIGHT/3*2)
-        self.home_button = Button("Home", WIDTH/2 - Button.width - Button.width / 6, HEIGHT/3*2)
+        # self.play_button = Button("Play Again", WIDTH/2 + Button.width / 6, HEIGHT/3*2)
+        # self.home_button = Button("Home", WIDTH/2 - Button.width - Button.width / 6, HEIGHT/3*2)
+        self.home_button = Button("Home", WIDTH/2 - Button.width/2 , HEIGHT/3*2)
 
         self.ff_toggle = ToggleButton(WIDTH-150, 25, 50, 50, ["images/ff_on.png","images/ff_off.png"])
         self.sound_toggle = ToggleButton(WIDTH-75, 25, 50, 50, ["images/sound_on.png","images/sound_off.png"])
@@ -108,9 +109,9 @@ class NNGame(GameScreen):
                         self.active = False if self.active else True
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.play_button.mouse_over():
-                        if self.active == False:
-                            self.reset_game()
+                    # if self.play_button.mouse_over():
+                    #     if self.active == False:
+                    #         self.reset_game()
                     if self.home_button.mouse_over():
                         self.reset_game()
                         self.nav.navigate('home')
@@ -192,7 +193,7 @@ class NNGame(GameScreen):
                 self.screen.blit(self.death_screen, self.death_screen_rect)
                 self.screen.blit(self.gameover.render_text('Game Paused'), (self.gameover.horizontal_middle(), HEIGHT/3))  
                 self.home_button.draw(self.screen)
-                self.play_button.draw(self.screen)
+                # self.play_button.draw(self.screen)
 
             self.screen.blit(self.sound_toggle.image, (self.sound_toggle.x, self.sound_toggle.y)) 
 
